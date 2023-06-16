@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+  <script type="text/javascript">
+    const generateConfig = (type) => {
+        const isBar = type === 'bar'
+
+        return {
+            type,
+            data: {
+                datasets: [{
+                    data: {{data|safe}},
+                    backgroundColor : ['blue','red']
+                }],
+                labels: {{labels|safe}}
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    display: false,
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            display: isBar
+                        },
+                        gridLines: {
+                            display: isBar
+                        }
+                    }]
+                }
+            }
+        }
+    }
+
+    window.onload = function() {
+      const pieCtx = document.getElementById('pie-chart').getContext('2d');
+      const barCtx = document.getElementById('bar-chart').getContext('2d');
+
+      window.myPie = new Chart(pieCtx, generateConfig('pie'));
+      window.myPie = new Chart(barCtx, generateConfig('bar'));
+    };
+  </script>
+
+<div class="card mb-5" style="font-size: 1.2rem">
+    <div class="d-flex">
+        <a class="btn btn-primary w-50" style="margin-left: 10px; margin-right: 10px" href="{% url 'statisticsIncomes' %}">Incomes by category</a>
+        <a class="btn btn-primary w-50" style="margin-left: 10px; margin-right: 10px" href="{% url 'statisticsExpenses' %}">Expenses by category</a>
+    </div>
+    <h1 class="my-3 text-center">Your overall statistics:</h1>
+    <div id="container" >
+        <canvas class="my-5" id="pie-chart"></canvas>
+        <canvas class="mb-5" id="bar-chart"></canvas>
+    </div>
+</div>
+{% endblock %}

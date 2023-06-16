@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<script type="text/javascript">
+    const myJSONList = (("{{data}}").replace(/&(l|g|quo)t;/g, function (a, b) {
+        return {
+            l: '<',
+            g: '>',
+            quo: '"'
+        }[b];
+    }));
+    const myData = JSON.parse(myJSONList);
+    const summedData = {};
+
+    myData.forEach(record => {
+        summedData[record.category] = !summedData[record.category] ? record.amount : summedData[record.category] + record.amount;
+    })
+
+    const randomNum = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
+    const randomRGB = () => `rgb(${randomNum()}, ${randomNum()}, ${randomNum()})`;
+    const backgroundColor = Object.values(summedData).map(randomRGB);
+
+    const generateConfig = (type) => {
+        const isBar = type === 'bar'
+
+        return {
+            type,
+            data: {
+                datasets: [{
+                    data: Object.values(summedData),
+                    backgroundColor
+                }],
+                labels: Object.keys(summedData)
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    display: false,
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            display: isBar
+                        },
+                        gridLines: {
+                            display: isBar
+                        }
+                    }]
+                }
+            }
+        }
+    }
+
+    window.onload = function () {
+        const pieCtx = document.getElementById('pie-chart').getContext('2d');
+        const barCtx = document.getElementById('bar-chart').getContext('2d');
+
+        window.myPie = new Chart(pieCtx, generateConfig('pie'));
+        window.myPie = new Chart(barCtx, generateConfig('bar'));
+    };
+</script>
+
+<div class="card mb-5" style="font-size: 1.2rem">
+    <a class="btn btn-primary" style="margin-left: 10px; margin-right: 10px" href="{% url 'statistics' %}">Overall statistics</a>
+
+    <h1 class="my-3 text-center">Your {{title}} by category:</h1>
+    <div id="container">
+        <canvas class="my-5" id="pie-chart"></canvas>
+        <canvas id="bar-chart"></canvas>
+    </div>
+</div>
+{% endblock %}

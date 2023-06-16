@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card mb-5">
+    <div class="card-body">
+        <div style="text-align: center" class="mb-3">
+            <h1 class="text-primary" style="font-size: 4em"><strong>Plan your home budget</strong></h1>
+            <p>Stay up to date with your expenses.</p>
+            <a href="{% url 'register' %}?next={{request.path}}" class="btn btn-primary">Create account</a>
+            <a href="{% url 'login' %}" class="btn btn-primary">Log in</a>
+            <br>
+        </div>
+    </div>
+</div>
+{% endblock %}

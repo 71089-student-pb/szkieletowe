@@ -1,0 +1,62 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home budget</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load fontawesome_5 %}
+    {% fontawesome_5_static %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top d-flex justify-content-between">
+    {% if user.is_authenticated %}
+    <a href="{% url 'home' %}" class="text-primary ml-5 text-decoration-none"><h1>Home Budget</h1></a>
+    {% else %}
+    <a href="{% url 'index' %}" class="text-primary ml-5 text-decoration-none"><h1>Home Budget</h1></a>
+    {% endif %}
+    {% if user.is_authenticated %}
+    <div class="dropdown bg-light">
+        <button class="btn btn-primary no-after" type="button" id="dropdownMenu" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            <i class="fa fa-bars h3 mb-0"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end pb-0" aria-labelledby="dropdownMenu">
+            <li>
+                <a class="dropdown-item" href="{% url 'home' %}" type="button">Home</a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{% url 'categories' %}" type="button">Categories</a>
+            </li>
+            <li>
+                <hr class="dropdown-divider mb-0">
+            </li>
+            <li>
+                <a class="btn btn-primary w-100" href="{% url 'logout' %}">Log out</a>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+</nav>
+<div class="mt-5 min-vh-100">
+    <div class="container mt-5" style="max-height: max
+    -content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+<footer class="mt-auto bg-light text-center text-lg-start fixed-bottom">
+</footer>
+</body>
+</html>
